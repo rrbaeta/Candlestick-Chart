@@ -1,8 +1,8 @@
 // CandlestickCharting.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //  This file is given as a starting point to help you with your coursework :).
 //  You will want to split this single file into multiple classes, objects and methods fairly early on.
-//  Author:  Chris Bass
-//     SID:  1234567890
+//  Author:  Rodrigo Baeta
+//     SID:  8789109
 
 #include <iostream>
 #include <iomanip>
@@ -15,8 +15,8 @@ using namespace std;
 int main()
 {
     cout << "Candlestick Charting Program Title!" << endl;
-	cout << "Author:  Chris Bass" << endl;
-	cout << "SID:  1234567890" << endl << endl;
+	cout << "Author:  Rodrigo Baeta" << endl;
+	cout << "SID:  8789109" << endl << endl;
 
 	// Read input data from .csv file.
 	//  Assumes the data is in a particular format:
