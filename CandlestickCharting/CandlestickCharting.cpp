@@ -10,6 +10,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -18,6 +19,12 @@ int main()
     cout << "Candlestick Charting Program Title!" << endl;
 	cout << "Author:  Rodrigo Baeta" << endl;
 	cout << "SID:  8789109" << endl << endl;
+
+	vector<float> open, high, low, close, volume, marketCap;
+	vector<float> posOrNegative;
+	vector<string> dateVector;
+
+	int vectorSize;
 
 	// Read input data from .csv file.
 	//  Assumes the data is in a particular format:
@@ -38,8 +45,6 @@ int main()
 
 	if (inputFileStream.good())
 	{
-
-		vector<float> open, high, low, close, volume, marketCap;
 
 		cout << "Input file is good start processing..." << endl << endl;
 		
@@ -63,6 +68,8 @@ int main()
 			string date = date1 + date2;
 			string trimmedDate = date.substr(1, date.size() - 2);
 
+			dateVector.emplace_back(date1);
+
 			cout << setw(14) << trimmedDate << " " << char(179);
 
 			cout << fixed;
@@ -75,7 +82,7 @@ int main()
 				fss >> fieldData; // try to convert to a double, this might fail !!!
 				cout << setw(14) << setprecision(0) << fieldData << " " << char(179);
 				
-				//Inserting the values to a vector
+				//Inserting the values to their respective vectors
 				switch (i)
 				{
 				case 0:
@@ -124,11 +131,33 @@ int main()
 
 	inputFileStream.close();
 
+	vectorSize = open.size();
+
+	for(int i = 0; i < vectorSize; i++)
+	{
+
+		float result;
+
+		result = open[i] - close[i];
+
+		posOrNegative.emplace_back(result);
+
+		//if the result is negative the market closed with a higher value then what it opened with
+
+	}
+
+	float max = *max_element(high.begin(), high.end());
+
+	cout << max << endl;
+
+	cout << "\n- Price -" << setw(80) << "Candlestick chart showing the last 3 months' data" << endl;
+
+	cout << setw(8) << max << char(179) << endl;
+
 }
 
-int posOrNeg()
+int output()
 {
-
 	return 0;
 }
 
