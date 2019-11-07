@@ -9,6 +9,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <vector>
 
 using namespace std;
 
@@ -37,6 +38,9 @@ int main()
 
 	if (inputFileStream.good())
 	{
+
+		vector<float> open, high, low, close, volume, marketCap;
+
 		cout << "Input file is good start processing..." << endl << endl;
 		
 		cout << right << setw(14) << "Date:" << setw(16) << "Open:" << setw(16) << "High:" << setw(16) << "Low:" << setw(16) << "Close:" << setw(16) << "Volume:" << setw(16) << "Market Cap:" << endl;
@@ -70,6 +74,32 @@ int main()
 				stringstream fss(field);
 				fss >> fieldData; // try to convert to a double, this might fail !!!
 				cout << setw(14) << setprecision(0) << fieldData << " " << char(179);
+				
+				//Inserting the values to a vector
+				switch (i)
+				{
+				case 0:
+					open.emplace_back(std::stof(field));
+				break;
+				case 1:
+					high.emplace_back(std::stof(field));
+				break;
+				case 2:
+					low.emplace_back(std::stof(field));
+				break;
+				case 3:
+					close.emplace_back(std::stof(field));
+				break;
+				case 4:
+					volume.emplace_back(std::stof(field));
+				break;
+				case 5:
+					marketCap.emplace_back(std::stof(field));
+				break;
+				default:
+					break;
+				}
+				
 			}
 
 			cout << endl;
@@ -94,7 +124,12 @@ int main()
 
 	inputFileStream.close();
 
+}
 
+int posOrNeg()
+{
+
+	return 0;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
