@@ -164,15 +164,52 @@ int main()
 
 	}
 
-	float max = *max_element(high.begin(), high.end());
-
-	//Need to find the index of the maximum value in the vector
-
 	cout << "\n- Price -" << setw(80) << "Candlestick chart showing the last 3 months' data" << endl;
 
-	cout << setw(8) << max << char(180) << endl; //Output the maximum value on the y axes
+	//This for outputs the high bars
+	for (int i = 0; i < vectorSize; i++)
+	{
 
-	cout << setw(9) << char(192);
+		float max = *max_element(high.begin(), high.end()); //max is the maximum value from the high vector
+
+		float oldMax;
+
+		//Need to find the index of the maximum value in the vector
+		vector<float>::iterator it;
+		it = find(high.begin(), high.end(), max);
+
+		cout << setw(8) << max << char(180); //Output the maximum value on the y axes
+
+		cout << setw((it - high.begin() + 1)*2) << char(179); //Output the candleSticks
+
+		high[it - high.begin()] = 0;
+
+		oldMax = max;
+
+		max = *max_element(high.begin(), high.end());
+
+		while(oldMax == max)
+		{
+
+			it = find(high.begin(), high.end(), max);
+
+			cout << setw((it - high.begin() + 1)*2) << char(179); //Output the candleSticks
+
+			high[it - high.begin()] = 0;
+
+			oldMax = max;
+
+			max = *max_element(high.begin(), high.end());
+
+			vectorSize -= 1;
+
+		}
+
+		cout << endl;
+
+	}
+
+ 	cout << setw(9) << char(192);
 	
 	//Output the x axes bar
 	for (int i = 0; i < vectorSize; i++)
