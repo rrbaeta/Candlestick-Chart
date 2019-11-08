@@ -24,6 +24,8 @@ int main()
 	vector<float> posOrNegative;
 	vector<string> dateVector;
 
+	string dateDay;
+
 	int vectorSize;
 
 	// Read input data from .csv file.
@@ -68,7 +70,13 @@ int main()
 			string date = date1 + date2;
 			string trimmedDate = date.substr(1, date.size() - 2);
 
-			dateVector.emplace_back(date1);
+			//Inserting the dates into the vector dateVector
+			stringstream dd(date1);
+			getline(dd, dateDay, ' ');
+			getline(dd, dateDay, ' ');
+
+			dateVector.emplace_back(dateDay);
+
 
 			cout << setw(14) << trimmedDate << " " << char(179);
 
@@ -131,7 +139,17 @@ int main()
 
 	inputFileStream.close();
 
+	//Starting to figure out the graph
 	vectorSize = open.size();
+
+	//Reverse all the vectors so that they are on the right date order
+	reverse(dateVector.begin(), dateVector.end());
+	reverse(open.begin(), open.end());
+	reverse(high.begin(), high.end());
+	reverse(low.begin(), low.end());
+	reverse(close.begin(), close.end());
+	reverse(volume.begin(), volume.end());
+	reverse(marketCap.begin(), marketCap.end());
 
 	for(int i = 0; i < vectorSize; i++)
 	{
@@ -148,11 +166,31 @@ int main()
 
 	float max = *max_element(high.begin(), high.end());
 
-	cout << max << endl;
+	//Need to find the index of the maximum value in the vector
 
 	cout << "\n- Price -" << setw(80) << "Candlestick chart showing the last 3 months' data" << endl;
 
-	cout << setw(8) << max << char(179) << endl;
+	cout << setw(8) << max << char(180) << endl; //Output the maximum value on the y axes
+
+	cout << setw(9) << char(192);
+	
+	//Output the x axes bar
+	for (int i = 0; i < vectorSize; i++)
+	{
+		cout << char(196) << char(194);
+	}
+
+	cout << endl;
+
+	//Output the dates
+	cout << setw(11);
+
+	for (int i = 0; i < vectorSize; i++)
+	{
+		cout << dateVector[i] << setw(2);
+	}
+
+	cout << endl;
 
 }
 
