@@ -166,48 +166,111 @@ int main()
 
 	cout << "\n- Price -" << setw(80) << "Candlestick chart showing the last 3 months' data" << endl;
 
+
+
 	//This for outputs the high bars
-	for (int i = 0; i < vectorSize; i++)
+
+	float maxHigh = *max_element(high.begin(), high.end()); //maxHigh is the maximum value from the high vector
+	float maxLow = *max_element(low.begin(), low.end()); //maxLow is the maximum value from the low vector
+
+	float oldMaxHigh = 0;
+	float oldMaxLow = 0;
+
+	vector<float>::iterator itHigh;
+	vector<float>::iterator itLow;
+
+	//for (int i = 0; i < vectorSize; i++)
+	while(maxHigh != 0)
 	{
 
-		float max = *max_element(high.begin(), high.end()); //max is the maximum value from the high vector
-
-		float oldMax;
-
 		//Need to find the index of the maximum value in the vector
-		vector<float>::iterator it;
-		it = find(high.begin(), high.end(), max);
+		itHigh = find(high.begin(), high.end(), maxHigh);
 
-		cout << setw(8) << max << char(180); //Output the maximum value on the y axes
+		cout << setw(8) << maxHigh << char(180); //Output the maximum value on the y axes
 
-		cout << setw((it - high.begin() + 1)*2) << char(179); //Output the candleSticks
+		cout << setw((itHigh - high.begin() + 1)*2) << char(179); //Output the candleSticks
 
-		high[it - high.begin()] = 0;
+		high[itHigh - high.begin()] = 0;
 
-		oldMax = max;
+		oldMaxHigh = maxHigh;
 
-		max = *max_element(high.begin(), high.end());
+		maxHigh = *max_element(high.begin(), high.end());
 
-		while(oldMax == max)
+
+		while(oldMaxHigh == maxHigh)
 		{
 
-			it = find(high.begin(), high.end(), max);
+			itHigh = find(high.begin(), high.end(), maxHigh);
 
-			cout << setw((it - high.begin() + 1)*2) << char(179); //Output the candleSticks
+			cout << setw((itHigh - high.begin() + 1)*2) << char(179); //Output the candleSticks
 
-			high[it - high.begin()] = 0;
+			high[itHigh - high.begin()] = 0;
 
-			oldMax = max;
+			oldMaxHigh = maxHigh;
 
-			max = *max_element(high.begin(), high.end());
+			maxHigh = *max_element(high.begin(), high.end());
 
-			vectorSize -= 1;
+		}
+		
+		
+		while (maxHigh == maxLow)
+		{
+
+			itLow = find(low.begin(), low.end(), maxLow);
+
+			cout << setw((itLow - low.begin() + 1) * 2) << char(179); //Output the candleSticks
+
+			low[itLow - low.begin()] = 0;
+
+			oldMaxLow = maxLow;
+
+			maxLow = *max_element(low.begin(), low.end());
 
 		}
 
 		cout << endl;
 
 	}
+
+	
+	if (maxHigh < maxLow)
+	{
+		while (maxLow != 0)
+		{
+
+			itLow = find(low.begin(), low.end(), maxLow);
+
+			cout << setw(8) << maxLow << char(180); //Output the maximum value on the y axes
+
+			cout << setw((itLow - low.begin() + 1) * 2) << char(179); //Output the candleSticks
+
+			low[itLow - low.begin()] = 0;
+
+			oldMaxLow = maxLow;
+
+			maxLow = *max_element(low.begin(), low.end());
+
+			while (oldMaxHigh == maxLow)
+			{
+
+				itLow = find(low.begin(), low.end(), maxLow);
+
+				cout << setw((itLow - low.begin() + 1) * 2) << char(179); //Output the candleSticks
+
+				low[itLow - low.begin()] = 0;
+
+				oldMaxLow = maxLow;
+
+				maxLow = *max_element(low.begin(), low.end());
+
+			}
+
+			cout << endl;
+
+		}
+	}
+	
+
 
  	cout << setw(9) << char(192);
 	
