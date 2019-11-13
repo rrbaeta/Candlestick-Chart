@@ -148,23 +148,39 @@ int main()
 	float maxHigh = *max_element(high.begin(), high.end()); //maxHigh is the maximum value from the high vector
 	float minLow = *min_element(low.begin(), low.end()); //minLow is the minimum value from the low vector
 
-	//scale the y axes to 35 values
+	//scale the y axes to 45 values
 	float priceScale = (maxHigh - minLow) / 45;
 	float yAxesPrice = maxHigh;
+	float outputRange = priceScale / 2; //devide by 2 so that we output on the same line a value 50% above and under the y axes value
 
 	//Create a Vector of pairs
 	vector < pair<float, int> > pairHigh = createVectorPairs(high);
 	vector < pair<float, int> > pairLow = createVectorPairs(low);
 	vector < pair<float, int> > pairOpen = createVectorPairs(open);
 	vector < pair<float, int> > pairClose = createVectorPairs(close);
-	
 
 	//output the y axis
 	for (int i = 0; i < 45; i++)
 	{
 		cout << setw(8) << yAxesPrice << char(180); //Output the maximum value on the y axes
+
+		//check if a there are values in the vector between a range of values
+		//not working
+		if (count(high.begin(), high.end(), (yAxesPrice + outputRange)) && count(high.begin(), high.end(), (yAxesPrice - outputRange)))
+		{
+			cout << setw((pairHigh[i].second)) << char(179); //Output the candleSticks
+		}
+
 		cout << endl;
 		yAxesPrice = yAxesPrice - priceScale;
+
+		/*
+		switch (1)
+		{
+		default:
+			break;
+		}
+		*/
 	}
 
 	xAxesOutput(dateVector);
