@@ -14,6 +14,9 @@
 
 using namespace std;
 
+void xAxesOutput(vector<string> dateVector);
+vector < pair<float, int> > createVectorPairs(vector<float> vectorReceived);
+
 int main()
 {
     cout << "Candlestick Charting Program Title!" << endl;
@@ -25,8 +28,6 @@ int main()
 	vector<string> dateVector;
 
 	string dateDay;
-
-	int vectorSize;
 
 	// Read input data from .csv file.
 	//  Assumes the data is in a particular format:
@@ -139,7 +140,37 @@ int main()
 
 	inputFileStream.close();
 
+
+
 	//Starting to figure out the graph
+	cout << "\n- Price -" << setw(80) << "Candlestick chart showing the last 3 months' data" << endl;
+
+	float maxHigh = *max_element(high.begin(), high.end()); //maxHigh is the maximum value from the high vector
+	float minLow = *min_element(low.begin(), low.end()); //minLow is the minimum value from the low vector
+
+	//scale the y axes to 35 values
+	float priceScale = (maxHigh - minLow) / 45;
+	float yAxesPrice = maxHigh;
+
+	//Create a Vector of pairs
+	vector < pair<float, int> > pairHigh = createVectorPairs(high);
+	vector < pair<float, int> > pairLow = createVectorPairs(low);
+	vector < pair<float, int> > pairOpen = createVectorPairs(open);
+	vector < pair<float, int> > pairClose = createVectorPairs(close);
+	
+
+	//output the y axis
+	for (int i = 0; i < 45; i++)
+	{
+		cout << setw(8) << yAxesPrice << char(180); //Output the maximum value on the y axes
+		cout << endl;
+		yAxesPrice = yAxesPrice - priceScale;
+	}
+
+	xAxesOutput(dateVector);
+
+
+	/*
 	vectorSize = open.size();
 
 	//Reverse all the vectors so that they are on the right date order
@@ -269,11 +300,16 @@ int main()
 
 		}
 	}
-	
+	*/
 
+}
 
- 	cout << setw(9) << char(192);
-	
+void xAxesOutput(vector<string> dateVector)
+{
+	int vectorSize = dateVector.size();
+
+	cout << setw(9) << char(192);
+
 	//Output the x axes bar
 	for (int i = 0; i < vectorSize; i++)
 	{
@@ -291,12 +327,24 @@ int main()
 	}
 
 	cout << endl;
-
 }
 
-int output()
+
+
+vector < pair<float, int> > createVectorPairs(vector<float> vectorReceived)
 {
-	return 0;
+	vector < pair<float, int> > vectorToPair;
+
+	for (int i = 0; i < vectorReceived.size(); i++)
+	{
+		vectorToPair.push_back(make_pair(vectorReceived[i], i + 1));
+	}
+
+	sort(vectorToPair.begin(), vectorToPair.end());
+
+	reverse(vectorToPair.begin(), vectorToPair.end());
+
+	return vectorToPair;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
