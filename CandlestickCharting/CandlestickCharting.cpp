@@ -143,8 +143,6 @@ int main()
 
 
 	//Starting to figure out the graph
-	cout << "\n- Price -" << setw(80) << "Candlestick chart showing the last 3 months' data" << endl;
-
 	float maxHigh = *max_element(high.begin(), high.end()); //maxHigh is the maximum value from the high vector
 	float minLow = *min_element(low.begin(), low.end()); //minLow is the minimum value from the low vector
 
@@ -158,29 +156,34 @@ int main()
 	vector < pair<float, int> > pairLow = createVectorPairs(low);
 	vector < pair<float, int> > pairOpen = createVectorPairs(open);
 	vector < pair<float, int> > pairClose = createVectorPairs(close);
+	/*
+	for (int i = 0; i < high.size(); i++)
+	{
+		cout << pairHigh[i].first << " " << pairHigh[i].second << endl;
+	}
+	*/
+	cout << "\n- Price -" << setw(80) << "Candlestick chart showing the last 3 months' data" << endl;
 
 	//output the y axis
 	for (int i = 0; i < 45; i++)
 	{
 		cout << setw(8) << yAxesPrice << char(180); //Output the maximum value on the y axes
 
-		//check if a there are values in the vector between a range of values
-		//not working
-		if (count(high.begin(), high.end(), (yAxesPrice + outputRange)) && count(high.begin(), high.end(), (yAxesPrice - outputRange)))
+		//check if there are values in the vector between a range of values
+		for (int i = 0; i < high.size(); i++)
 		{
-			cout << setw((pairHigh[i].second)) << char(179); //Output the candleSticks
+			if (pairHigh[i].first < (yAxesPrice + outputRange) && pairHigh[i].first > (yAxesPrice - outputRange))
+			{
+				cout << setw((pairHigh[i].second)*2) << char(179); //Output the candleSticks
+			}
+			else{
+			}
 		}
+
 
 		cout << endl;
 		yAxesPrice = yAxesPrice - priceScale;
 
-		/*
-		switch (1)
-		{
-		default:
-			break;
-		}
-		*/
 	}
 
 	xAxesOutput(dateVector);
@@ -210,10 +213,6 @@ int main()
 		//if the result is negative the market closed with a higher value then what it opened with
 
 	}
-
-	cout << "\n- Price -" << setw(80) << "Candlestick chart showing the last 3 months' data" << endl;
-
-
 
 	//This for outputs the high bars
 
@@ -322,6 +321,8 @@ int main()
 
 void xAxesOutput(vector<string> dateVector)
 {
+	reverse(dateVector.begin(), dateVector.end());
+
 	int vectorSize = dateVector.size();
 
 	cout << setw(9) << char(192);
@@ -349,6 +350,8 @@ void xAxesOutput(vector<string> dateVector)
 
 vector < pair<float, int> > createVectorPairs(vector<float> vectorReceived)
 {
+	reverse(vectorReceived.begin(), vectorReceived.end());
+
 	vector < pair<float, int> > vectorToPair;
 
 	for (int i = 0; i < vectorReceived.size(); i++)
@@ -356,9 +359,7 @@ vector < pair<float, int> > createVectorPairs(vector<float> vectorReceived)
 		vectorToPair.push_back(make_pair(vectorReceived[i], i + 1));
 	}
 
-	sort(vectorToPair.begin(), vectorToPair.end());
-
-	reverse(vectorToPair.begin(), vectorToPair.end());
+	sort(vectorToPair.begin(), vectorToPair.end(), greater <>());
 
 	return vectorToPair;
 }
