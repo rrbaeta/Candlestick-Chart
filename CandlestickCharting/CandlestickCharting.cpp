@@ -153,9 +153,10 @@ int main()
 
 	//Create a Vector of pairs
 	vector < pair<float, int> > pairHigh = createVectorPairs(high);
-	vector < pair<float, int> > pairLow = createVectorPairs(low);
-	vector < pair<float, int> > pairOpen = createVectorPairs(open);
-	vector < pair<float, int> > pairClose = createVectorPairs(close);
+	//vector < pair<float, int> > pairLow = createVectorPairs(low);
+	//vector < pair<float, int> > pairOpen = createVectorPairs(open);
+	//vector < pair<float, int> > pairClose = createVectorPairs(close);
+
 	/*
 	for (int i = 0; i < high.size(); i++)
 	{
@@ -167,6 +168,8 @@ int main()
 	//output the y axis
 	for (int i = 0; i < 45; i++)
 	{
+		int prevSpace = 0;
+
 		cout << setw(8) << yAxesPrice << char(180); //Output the maximum value on the y axes
 
 		//check if there are values in the vector between a range of values
@@ -174,7 +177,8 @@ int main()
 		{
 			if (pairHigh[i].first < (yAxesPrice + outputRange) && pairHigh[i].first > (yAxesPrice - outputRange))
 			{
-				cout << setw((pairHigh[i].second)*2) << char(179); //Output the candleSticks
+				cout << setw(((pairHigh[i].second)*2) - prevSpace) << char(179); //Output the candleSticks
+				prevSpace = (pairHigh[i].second) * 2;
 			}
 			else{
 			}
@@ -183,7 +187,6 @@ int main()
 
 		cout << endl;
 		yAxesPrice = yAxesPrice - priceScale;
-
 	}
 
 	xAxesOutput(dateVector);
@@ -359,7 +362,12 @@ vector < pair<float, int> > createVectorPairs(vector<float> vectorReceived)
 		vectorToPair.push_back(make_pair(vectorReceived[i], i + 1));
 	}
 
-	sort(vectorToPair.begin(), vectorToPair.end(), greater <>());
+	//sort(vectorToPair.begin(), vectorToPair.end());
+
+	for (int i = 0; i < vectorReceived.size(); i++)
+	{
+		cout << vectorToPair[i].first << " " << vectorToPair[i].second << endl;
+	}
 
 	return vectorToPair;
 }
