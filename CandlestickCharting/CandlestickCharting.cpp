@@ -16,6 +16,7 @@ using namespace std;
 
 void xAxesOutput(vector<string> dateVector);
 vector < pair<float, int> > createVectorPairs(vector<float> vectorReceived);
+void candleSticksOutput(vector<float> open, vector<float> high, vector<float> low, vector<float> close);
 
 int main()
 {
@@ -140,213 +141,37 @@ int main()
 
 	inputFileStream.close();
 
+	//Graph Output
 
+	candleSticksOutput(open, high, low, close);
+	xAxesOutput(dateVector);
 
-	//Starting to figure out the graph
-	float maxHigh = *max_element(high.begin(), high.end()); //maxHigh is the maximum value from the high vector
-	float minLow = *min_element(low.begin(), low.end()); //minLow is the minimum value from the low vector
+	//Output Trading Volume Graph
 
-	//scale the y axes to 45 values
-	float priceScale = (maxHigh - minLow) / 45;
-	float outputRange = priceScale / 2; //devide by 2 so that we output on the same line a value 50% above and under the y axes value
-	float yAxesPrice = maxHigh;
+	//scale the y axes to 5 values
+	float maxVolume = *max_element(volume.begin(), volume.end()); //maxHigh is the maximum value from the high vector
+	float minVolume = *min_element(low.begin(), volume.end()); //minLow is the minimum value from the low vector
+	int scale = 5;
+	float volumeScale = (maxVolume - minVolume) / scale;
+	//float outputRange = priceScale / 2; //devide by 2 so that we output on the same line a value 50% above and under the y axes value
+	float yAxesVolume = maxVolume;
 
-	//Create a Vector of pairs
-	reverse(open.begin(), open.end());
-	reverse(high.begin(), high.end());
-	reverse(low.begin(), low.end());
-	reverse(close.begin(), close.end());
+	cout << "-Volume-" << setw(65) << "Bargraph showing trading volume";
 
+	cout << endl;
 
-	cout << "\n- Price -" << setw(80) << "Candlestick chart showing the last 3 months' data" << endl;
-
-	//output the y axis
-	for (int i = 0; i < 45; i++)
+	for (int i = 0; i < scale; i++)
 	{
-		int prevSpace = 0;
-
-		cout << setw(8) << yAxesPrice << char(180); //Output the maximum value on the y axes
-
-		//check if there are values in the vector between a range of values
-		for (int i = 0; i < high.size(); i++)
-		{
-			if (high[i] < (yAxesPrice + outputRange) && high[i] > (yAxesPrice - outputRange))
-			{
-				cout << setw(((i + 1) * 2) - prevSpace) << char(179); //Output the candleSticks
-				prevSpace = ((i + 1 )* 2);
-			}
-			if (low[i] < (yAxesPrice + outputRange) && low[i] > (yAxesPrice - outputRange))
-			{
-				cout << setw(((i + 1) * 2) - prevSpace) << char(179); //Output the candleSticks
-				prevSpace = ((i + 1) * 2);
-			}
-
-			//if the result is negative the market closed with a higher value then what it opened with
-			if ((open[i] - close[i]) < 0)
-			{
-				if (open[i] < (yAxesPrice + outputRange) && open[i] > (yAxesPrice - outputRange))
-				{
-					cout << setw(((i + 1) * 2) - prevSpace) << char(219); //Output the candleSticks
-					prevSpace = ((i + 1) * 2);
-				}
-				if (close[i] < (yAxesPrice + outputRange) && close[i] > (yAxesPrice - outputRange))
-				{
-					cout << setw(((i + 1) * 2) - prevSpace) << char(219); //Output the candleSticks
-					prevSpace = ((i + 1) * 2);
-				}
-			}
-			if ((open[i] - close[i]) > 0)
-			{
-				if (open[i] < (yAxesPrice + outputRange) && open[i] > (yAxesPrice - outputRange))
-				{
-					cout << setw(((i + 1) * 2) - prevSpace) << char(176); //Output the candleSticks
-					prevSpace = ((i + 1) * 2);
-				}
-				if (close[i] < (yAxesPrice + outputRange) && close[i] > (yAxesPrice - outputRange))
-				{
-					cout << setw(((i + 1) * 2) - prevSpace) << char(176); //Output the candleSticks
-					prevSpace = ((i + 1) * 2);
-				}
-			}
-		}
-
+		//cout << yAxesVolume << char(180); //Output the maximum value on the y axes
+		//yAxesVolume = yAxesVolume - volumeScale;
 
 		cout << endl;
-		yAxesPrice = yAxesPrice - priceScale;
 	}
 
 	xAxesOutput(dateVector);
 
-
-	/*
-	vectorSize = open.size();
-
-	//Reverse all the vectors so that they are on the right date order
-	reverse(dateVector.begin(), dateVector.end());
-	reverse(open.begin(), open.end());
-	reverse(high.begin(), high.end());
-	reverse(low.begin(), low.end());
-	reverse(close.begin(), close.end());
-	reverse(volume.begin(), volume.end());
-	reverse(marketCap.begin(), marketCap.end());
-
-	for(int i = 0; i < vectorSize; i++)
-	{
-
-		float result;
-
-		result = open[i] - close[i];
-
-		posOrNegative.emplace_back(result);
-
-		//if the result is negative the market closed with a higher value then what it opened with
-
-	}
-
-	//This for outputs the high bars
-
-	float maxHigh = *max_element(high.begin(), high.end()); //maxHigh is the maximum value from the high vector
-	float maxLow = *max_element(low.begin(), low.end()); //maxLow is the maximum value from the low vector
-
-	float oldMaxHigh = 0;
-	float oldMaxLow = 0;
-
-	vector<float>::iterator itHigh;
-	vector<float>::iterator itLow;
-
-	//for (int i = 0; i < vectorSize; i++)
-	while(maxHigh != 0)
-	{
-
-		//Need to find the index of the maximum value in the vector
-		itHigh = find(high.begin(), high.end(), maxHigh);
-
-		cout << setw(8) << maxHigh << char(180); //Output the maximum value on the y axes
-
-		cout << setw((itHigh - high.begin() + 1)*2) << char(179); //Output the candleSticks
-
-		high[itHigh - high.begin()] = 0;
-
-		oldMaxHigh = maxHigh;
-
-		maxHigh = *max_element(high.begin(), high.end());
-
-
-		while(oldMaxHigh == maxHigh)
-		{
-
-			itHigh = find(high.begin(), high.end(), maxHigh);
-
-			cout << setw((itHigh - high.begin() + 1)*2) << char(179); //Output the candleSticks
-
-			high[itHigh - high.begin()] = 0;
-
-			oldMaxHigh = maxHigh;
-
-			maxHigh = *max_element(high.begin(), high.end());
-
-		}
-		
-		
-		while (maxHigh == maxLow)
-		{
-
-			itLow = find(low.begin(), low.end(), maxLow);
-
-			cout << setw((itLow - low.begin() + 1) * 2) << char(179); //Output the candleSticks
-
-			low[itLow - low.begin()] = 0;
-
-			oldMaxLow = maxLow;
-
-			maxLow = *max_element(low.begin(), low.end());
-
-		}
-
-		cout << endl;
-
-	}
-
-	
-	if (maxHigh < maxLow)
-	{
-		while (maxLow != 0)
-		{
-
-			itLow = find(low.begin(), low.end(), maxLow);
-
-			cout << setw(8) << maxLow << char(180); //Output the maximum value on the y axes
-
-			cout << setw((itLow - low.begin() + 1) * 2) << char(179); //Output the candleSticks
-
-			low[itLow - low.begin()] = 0;
-
-			oldMaxLow = maxLow;
-
-			maxLow = *max_element(low.begin(), low.end());
-
-			while (oldMaxHigh == maxLow)
-			{
-
-				itLow = find(low.begin(), low.end(), maxLow);
-
-				cout << setw((itLow - low.begin() + 1) * 2) << char(179); //Output the candleSticks
-
-				low[itLow - low.begin()] = 0;
-
-				oldMaxLow = maxLow;
-
-				maxLow = *max_element(low.begin(), low.end());
-
-			}
-
-			cout << endl;
-
-		}
-	}
-	*/
-
 }
+
 
 void xAxesOutput(vector<string> dateVector)
 {
@@ -357,9 +182,12 @@ void xAxesOutput(vector<string> dateVector)
 	cout << setw(9) << char(192);
 
 	//Output the x axes bar
-	for (int i = 0; i < vectorSize; i++)
+
+	cout << char(196) << char(194);
+
+	for (int i = 0; i < vectorSize; i = i + 3)
 	{
-		cout << char(196) << char(194);
+		cout << char(196) << char(196) << char(194);
 	}
 
 	cout << endl;
@@ -367,11 +195,13 @@ void xAxesOutput(vector<string> dateVector)
 	//Output the dates
 	cout << setw(11);
 
-	for (int i = 0; i < vectorSize; i++)
+	for (int i = 0; i < vectorSize; i = i + 3)
 	{
-		cout << dateVector[i] << setw(2);
+		cout << dateVector[i] << setw(3);
 	}
 
+	cout << endl;
+	cout << setw(60) << "-Date-" << endl;
 	cout << endl;
 }
 
@@ -396,6 +226,83 @@ vector < pair<float, int> > createVectorPairs(vector<float> vectorReceived)
 	}
 
 	return vectorToPair;
+}
+
+void candleSticksOutput(vector<float> open, vector<float> high, vector<float> low, vector<float> close)
+{
+	//Starting to figure out the graph
+	float maxHigh = *max_element(high.begin(), high.end()); //maxHigh is the maximum value from the high vector
+	float minLow = *min_element(low.begin(), low.end()); //minLow is the minimum value from the low vector
+
+	//scale the y axes to 45 values
+	int scale = 45;
+	float priceScale = (maxHigh - minLow) / scale;
+	float outputRange = priceScale / 2; //devide by 2 so that we output on the same line a value 50% above and under the y axes value
+	float yAxesPrice = maxHigh;
+
+	//Create a Vector of pairs
+	reverse(open.begin(), open.end());
+	reverse(high.begin(), high.end());
+	reverse(low.begin(), low.end());
+	reverse(close.begin(), close.end());
+
+
+	cout << "\n- Price -" << setw(75) << "Candlestick chart showing the last 3 months' data" << endl;
+
+	//output the y axis
+	for (int i = 0; i < scale; i++)
+	{
+		int prevSpace = 0;
+
+		cout << setw(8) << yAxesPrice << char(180); //Output the maximum value on the y axes
+
+		//check if there are values in the vector between a range of values
+		for (int i = 0; i < high.size(); i++)
+		{
+			if (high[i] < (yAxesPrice + outputRange) && high[i] > (yAxesPrice - outputRange))
+			{
+				cout << setw((i + 1) - prevSpace) << char(179); //Output the candleSticks
+				prevSpace = (i + 1);
+			}
+			if (low[i] < (yAxesPrice + outputRange) && low[i] > (yAxesPrice - outputRange))
+			{
+				cout << setw((i + 1) - prevSpace) << char(179); //Output the candleSticks
+				prevSpace = (i + 1);
+			}
+
+			//if the result is negative the market closed with a higher value then what it opened with
+			if ((open[i] - close[i]) < 0)
+			{
+				if (open[i] < (yAxesPrice + outputRange) && open[i] > (yAxesPrice - outputRange))
+				{
+					cout << setw((i + 1) - prevSpace) << char(219); //Output the candleSticks
+					prevSpace = (i + 1);
+				}
+				if (close[i] < (yAxesPrice + outputRange) && close[i] > (yAxesPrice - outputRange))
+				{
+					cout << setw((i + 1) - prevSpace) << char(219); //Output the candleSticks
+					prevSpace = (i + 1);
+				}
+			}
+			if ((open[i] - close[i]) > 0)
+			{
+				if (open[i] < (yAxesPrice + outputRange) && open[i] > (yAxesPrice - outputRange))
+				{
+					cout << setw((i + 1) - prevSpace) << char(176); //Output the candleSticks
+					prevSpace = (i + 1);
+				}
+				if (close[i] < (yAxesPrice + outputRange) && close[i] > (yAxesPrice - outputRange))
+				{
+					cout << setw((i + 1) - prevSpace) << char(176); //Output the candleSticks
+					prevSpace = (i + 1);
+				}
+			}
+		}
+
+
+		cout << endl;
+		yAxesPrice = yAxesPrice - priceScale;
+	}
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
