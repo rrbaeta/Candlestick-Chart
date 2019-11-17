@@ -17,6 +17,7 @@ using namespace std;
 void xAxesOutput(vector<string> dateVector);
 vector < pair<float, int> > createVectorPairs(vector<float> vectorReceived);
 void candleSticksOutput(vector<float> open, vector<float> high, vector<float> low, vector<float> close);
+void tradingVolumeGraph(vector<float> open, vector<float> volume, vector<float> close);
 
 int main()
 {
@@ -146,31 +147,36 @@ int main()
 	candleSticksOutput(open, high, low, close);
 	xAxesOutput(dateVector);
 
-	//Output Trading Volume Graph
+	tradingVolumeGraph(open, volume, close);
+	xAxesOutput(dateVector);
 
-	//scale the y axes to 5 values
-	float maxVolume = *max_element(volume.begin(), volume.end()); //maxHigh is the maximum value from the high vector
-	float minVolume = *min_element(low.begin(), volume.end()); //minLow is the minimum value from the low vector
-	int scale = 5;
-	float volumeScale = (maxVolume - minVolume) / scale;
+	//MA Graph
+
+	//Starting to figure out the graph
+	float maxHigh = *max_element(high.begin(), high.end()); //maxHigh is the maximum value from the high vector
+	float minLow = *min_element(low.begin(), low.end()); //minLow is the minimum value from the low vector
+
+	//scale the y axes to 40 values
+	int scale = 40;
+	float priceScale = (maxHigh - minLow) / scale;
 	//float outputRange = priceScale / 2; //devide by 2 so that we output on the same line a value 50% above and under the y axes value
-	float yAxesVolume = maxVolume;
+	float yAxesPrice = maxHigh;
 
-	cout << "-Volume-" << setw(65) << "Bargraph showing trading volume";
-
-	cout << endl;
+	cout << setw(9) << "-Price-" << setw(65) << "Period-9 and period-18 MA chart" << endl;
 
 	for (int i = 0; i < scale; i++)
 	{
-		//cout << yAxesVolume << char(180); //Output the maximum value on the y axes
-		//yAxesVolume = yAxesVolume - volumeScale;
+		int prevSpace = 0;
+
+		cout << setw(8) << yAxesPrice << char(180); //Output the maximum value on the y axes
 
 		cout << endl;
+		yAxesPrice = yAxesPrice - priceScale;
 	}
 
 	xAxesOutput(dateVector);
-
 }
+
 
 
 void xAxesOutput(vector<string> dateVector)
@@ -234,8 +240,8 @@ void candleSticksOutput(vector<float> open, vector<float> high, vector<float> lo
 	float maxHigh = *max_element(high.begin(), high.end()); //maxHigh is the maximum value from the high vector
 	float minLow = *min_element(low.begin(), low.end()); //minLow is the minimum value from the low vector
 
-	//scale the y axes to 45 values
-	int scale = 45;
+	//scale the y axes to 40 values
+	int scale = 40;
 	float priceScale = (maxHigh - minLow) / scale;
 	float outputRange = priceScale / 2; //devide by 2 so that we output on the same line a value 50% above and under the y axes value
 	float yAxesPrice = maxHigh;
@@ -302,6 +308,48 @@ void candleSticksOutput(vector<float> open, vector<float> high, vector<float> lo
 
 		cout << endl;
 		yAxesPrice = yAxesPrice - priceScale;
+	}
+}
+
+
+void tradingVolumeGraph(vector<float> open, vector<float> volume, vector<float> close)
+{
+	//Output Trading Volume Graph
+
+	//scale the y axes to 5 values
+	float maxVolume = *max_element(volume.begin(), volume.end()); //maxHigh is the maximum value from the high vector
+	float minVolume = *min_element(volume.begin(), volume.end()); //minLow is the minimum value from the low vector
+	int scale = 5;
+	float volumeScale = (maxVolume - minVolume) / scale;
+	float outputRange = volumeScale / 2; //devide by 2 so that we output on the same line a value 50% above and under the y axes value
+	float yAxesVolume = maxVolume;
+	int prevSpace = 0;
+
+	cout << setw(9) << "-Volume-" << setw(65) << "Bargraph showing trading volume" << endl;
+
+	for (int i = 0; i < scale; i++)
+	{
+		cout << setw(4) << (yAxesVolume / 1000000000) << " Bil" << char(180); //Output the maximum value on the y axes
+
+		for (int i = 0; i < volume.size(); i++)
+		{
+			if (volume[i] >= (yAxesVolume - outputRange) && volume[i] <= (yAxesVolume + outputRange))
+			{
+				if ((open[i] - close[i]) < 0)
+				{
+					cout << setw((i) - prevSpace) << char(219); //Output the candleSticks
+					prevSpace = (i);
+				}
+				if ((open[i] - close[i]) > 0)
+				{
+					cout << setw((i) - prevSpace) << char(176); //Output the candleSticks
+					prevSpace = (i);
+				}
+			}
+		}
+
+		yAxesVolume = yAxesVolume - volumeScale;
+		cout << endl;
 	}
 }
 
