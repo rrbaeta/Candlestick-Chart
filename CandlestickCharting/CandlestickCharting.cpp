@@ -175,6 +175,10 @@ int main()
 	}
 
 	xAxesOutput(dateVector);
+
+	cout << "Please type ‘Y’ or ‘y’ to output to text file..." << endl;
+
+	cout << "Please type ‘Y’ or ‘y’ to run again..." << endl;
 }
 
 
@@ -189,7 +193,7 @@ void xAxesOutput(vector<string> dateVector)
 
 	//Output the x axes bar
 
-	cout << char(196) << char(194);
+	cout << char(194);
 
 	for (int i = 0; i < vectorSize; i = i + 3)
 	{
@@ -245,6 +249,8 @@ void candleSticksOutput(vector<float> open, vector<float> high, vector<float> lo
 	float priceScale = (maxHigh - minLow) / scale;
 	float outputRange = priceScale / 2; //devide by 2 so that we output on the same line a value 50% above and under the y axes value
 	float yAxesPrice = maxHigh;
+	int prevSpace = 0;
+
 
 	//Create a Vector of pairs
 	reverse(open.begin(), open.end());
@@ -258,7 +264,7 @@ void candleSticksOutput(vector<float> open, vector<float> high, vector<float> lo
 	//output the y axis
 	for (int i = 0; i < scale; i++)
 	{
-		int prevSpace = 0;
+		prevSpace = 0;
 
 		cout << setw(8) << yAxesPrice << char(180); //Output the maximum value on the y axes
 
@@ -317,13 +323,17 @@ void tradingVolumeGraph(vector<float> open, vector<float> volume, vector<float> 
 	//Output Trading Volume Graph
 
 	//scale the y axes to 5 values
+	reverse(volume.begin(), volume.end());
+	reverse(open.begin(), open.end());
+	reverse(close.begin(), close.end());
 	float maxVolume = *max_element(volume.begin(), volume.end()); //maxHigh is the maximum value from the high vector
 	float minVolume = *min_element(volume.begin(), volume.end()); //minLow is the minimum value from the low vector
 	int scale = 5;
-	float volumeScale = (maxVolume - minVolume) / scale;
+	float volumeScale = (maxVolume - minVolume) / (scale - 1);
 	float outputRange = volumeScale / 2; //devide by 2 so that we output on the same line a value 50% above and under the y axes value
 	float yAxesVolume = maxVolume;
 	int prevSpace = 0;
+	int spacing = 0;
 
 	cout << setw(9) << "-Volume-" << setw(65) << "Bargraph showing trading volume" << endl;
 
@@ -331,19 +341,29 @@ void tradingVolumeGraph(vector<float> open, vector<float> volume, vector<float> 
 	{
 		cout << setw(4) << (yAxesVolume / 1000000000) << " Bil" << char(180); //Output the maximum value on the y axes
 
+		prevSpace = 0;
+		/*
+		if (i == scale)
+		{
+			outputRange = outputRange * 1000000;
+		}
+		*/
 		for (int i = 0; i < volume.size(); i++)
 		{
-			if (volume[i] >= (yAxesVolume - outputRange) && volume[i] <= (yAxesVolume + outputRange))
+			if (volume[i] >= (yAxesVolume - outputRange))
 			{
 				if ((open[i] - close[i]) < 0)
 				{
-					cout << setw((i) - prevSpace) << char(219); //Output the candleSticks
-					prevSpace = (i);
+					spacing = i - prevSpace;
+					cout << setw(spacing) << char(219);
+					prevSpace = i;
 				}
-				if ((open[i] - close[i]) > 0)
+
+				if ((open[i] - close[i]) >= 0)
 				{
-					cout << setw((i) - prevSpace) << char(176); //Output the candleSticks
-					prevSpace = (i);
+					spacing = i - prevSpace;
+					cout << setw(spacing) << char(176);
+					prevSpace = i;
 				}
 			}
 		}
