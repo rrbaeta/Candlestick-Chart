@@ -185,29 +185,48 @@ int main()
 
 void xAxesOutput(vector<string> dateVector)
 {
+	vector<pair<char, char>> date;
 	reverse(dateVector.begin(), dateVector.end());
 
+	for (size_t i = 0; i < dateVector.size(); i++)
+	{
+		if (dateVector[i].length() == 2)
+		{
+			date.emplace_back(make_pair<char, char>((char)dateVector[i].c_str()[0], (char)dateVector[i].c_str()[1]));
+		}
+		else
+		{
+			date.emplace_back(make_pair<char, char>('0', (char)dateVector[i].c_str()[0]));
+		}
+	}
+	
 	int vectorSize = dateVector.size();
 
 	cout << setw(9) << char(192);
 
 	//Output the x axes bar
 
-	cout << char(194);
-
-	for (int i = 0; i < vectorSize; i = i + 3)
+	for (int i = 0; i < vectorSize; i = i++)
 	{
-		cout << char(196) << char(196) << char(194);
+		cout << char(194);
 	}
 
 	cout << endl;
 
 	//Output the dates
-	cout << setw(11);
+	cout << setw(10);
 
-	for (int i = 0; i < vectorSize; i = i + 3)
+	for (int i = 0; i < vectorSize; i = i++)
 	{
-		cout << dateVector[i] << setw(3);
+		cout << date[i].first;
+	}
+	
+	cout << endl;
+	cout << setw(10);
+
+	for (int i = 0; i < vectorSize; i = i++)
+	{
+		cout << date[i].second;
 	}
 
 	cout << endl;
@@ -273,13 +292,13 @@ void candleSticksOutput(vector<float> open, vector<float> high, vector<float> lo
 		{
 			if (high[i] < (yAxesPrice + outputRange) && high[i] > (yAxesPrice - outputRange))
 			{
-				cout << setw((i + 1) - prevSpace) << char(179); //Output the candleSticks
-				prevSpace = (i + 1);
+				cout << setw(i - prevSpace) << char(179); //Output the candleSticks
+				prevSpace = i;
 			}
 			if (low[i] < (yAxesPrice + outputRange) && low[i] > (yAxesPrice - outputRange))
 			{
-				cout << setw((i + 1) - prevSpace) << char(179); //Output the candleSticks
-				prevSpace = (i + 1);
+				cout << setw(i - prevSpace) << char(179); //Output the candleSticks
+				prevSpace = i;
 			}
 
 			//if the result is negative the market closed with a higher value then what it opened with
@@ -287,26 +306,26 @@ void candleSticksOutput(vector<float> open, vector<float> high, vector<float> lo
 			{
 				if (open[i] < (yAxesPrice + outputRange) && open[i] > (yAxesPrice - outputRange))
 				{
-					cout << setw((i + 1) - prevSpace) << char(219); //Output the candleSticks
-					prevSpace = (i + 1);
+					cout << setw(i - prevSpace) << char(219); //Output the candleSticks
+					prevSpace = i;
 				}
 				if (close[i] < (yAxesPrice + outputRange) && close[i] > (yAxesPrice - outputRange))
 				{
-					cout << setw((i + 1) - prevSpace) << char(219); //Output the candleSticks
-					prevSpace = (i + 1);
+					cout << setw(i - prevSpace) << char(219); //Output the candleSticks
+					prevSpace = i;
 				}
 			}
 			if ((open[i] - close[i]) > 0)
 			{
 				if (open[i] < (yAxesPrice + outputRange) && open[i] > (yAxesPrice - outputRange))
 				{
-					cout << setw((i + 1) - prevSpace) << char(176); //Output the candleSticks
-					prevSpace = (i + 1);
+					cout << setw(i - prevSpace) << char(176); //Output the candleSticks
+					prevSpace = i;
 				}
 				if (close[i] < (yAxesPrice + outputRange) && close[i] > (yAxesPrice - outputRange))
 				{
-					cout << setw((i + 1) - prevSpace) << char(176); //Output the candleSticks
-					prevSpace = (i + 1);
+					cout << setw(i - prevSpace) << char(176); //Output the candleSticks
+					prevSpace = i;
 				}
 			}
 		}
@@ -348,22 +367,22 @@ void tradingVolumeGraph(vector<float> open, vector<float> volume, vector<float> 
 			outputRange = outputRange * 1000000;
 		}
 		*/
-		for (int i = 0; i < volume.size(); i++)
+		for (int x = 0; x < volume.size(); x++)
 		{
-			if (volume[i] >= (yAxesVolume - outputRange))
+			if (volume[x] >= (yAxesVolume - outputRange))
 			{
-				if ((open[i] - close[i]) < 0)
+				if ((open[x] - close[x]) < 0)
 				{
-					spacing = i - prevSpace;
+					spacing = (x + 1) - prevSpace;
 					cout << setw(spacing) << char(219);
-					prevSpace = i;
+					prevSpace = x + 1;
 				}
 
-				if ((open[i] - close[i]) >= 0)
+				if ((open[x] - close[x]) >= 0)
 				{
-					spacing = i - prevSpace;
+					spacing = (x + 1) - prevSpace;
 					cout << setw(spacing) << char(176);
-					prevSpace = i;
+					prevSpace = x + 1;
 				}
 			}
 		}
