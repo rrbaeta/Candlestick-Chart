@@ -264,8 +264,8 @@ void candleSticksOutput(vector<float> open, vector<float> high, vector<float> lo
 	float minLow = *min_element(low.begin(), low.end()); //minLow is the minimum value from the low vector
 
 	//scale the y axes to 40 values
-	int scale = 40;
-	float priceScale = (maxHigh - minLow) / scale;
+	int scale = 60;
+	float priceScale = (maxHigh - minLow) / (scale - 1);
 	float outputRange = priceScale / 2; //devide by 2 so that we output on the same line a value 50% above and under the y axes value
 	float yAxesPrice = maxHigh;
 	int prevSpace = 0;
@@ -290,17 +290,6 @@ void candleSticksOutput(vector<float> open, vector<float> high, vector<float> lo
 		//check if there are values in the vector between a range of values
 		for (int i = 0; i < high.size(); i++)
 		{
-			if (high[i] < (yAxesPrice + outputRange) && high[i] > (yAxesPrice - outputRange))
-			{
-				cout << setw(i - prevSpace) << char(179); //Output the candleSticks
-				prevSpace = i;
-			}
-			if (low[i] < (yAxesPrice + outputRange) && low[i] > (yAxesPrice - outputRange))
-			{
-				cout << setw(i - prevSpace) << char(179); //Output the candleSticks
-				prevSpace = i;
-			}
-
 			//if the result is negative the market closed with a higher value then what it opened with
 			if ((open[i] - close[i]) < 0)
 			{
@@ -308,25 +297,43 @@ void candleSticksOutput(vector<float> open, vector<float> high, vector<float> lo
 				{
 					cout << setw(i - prevSpace) << char(219); //Output the candleSticks
 					prevSpace = i;
+					continue;
 				}
-				if (close[i] < (yAxesPrice + outputRange) && close[i] > (yAxesPrice - outputRange))
+				if (close[i] > (yAxesPrice - outputRange) && open[i] < (yAxesPrice - outputRange))
 				{
 					cout << setw(i - prevSpace) << char(219); //Output the candleSticks
 					prevSpace = i;
+					continue;
 				}
 			}
+
 			if ((open[i] - close[i]) > 0)
 			{
-				if (open[i] < (yAxesPrice + outputRange) && open[i] > (yAxesPrice - outputRange))
+				if (open[i] > (yAxesPrice - outputRange) && close[i] < (yAxesPrice - outputRange))
 				{
 					cout << setw(i - prevSpace) << char(176); //Output the candleSticks
 					prevSpace = i;
+					continue;
 				}
 				if (close[i] < (yAxesPrice + outputRange) && close[i] > (yAxesPrice - outputRange))
 				{
 					cout << setw(i - prevSpace) << char(176); //Output the candleSticks
 					prevSpace = i;
+					continue;
 				}
+			}
+
+			if (high[i] > (yAxesPrice - outputRange) && close[i] < (yAxesPrice - outputRange) && open[i] < (yAxesPrice - outputRange))
+			{
+				cout << setw(i - prevSpace) << char(179); //Output the candleSticks
+				prevSpace = i;
+				continue;
+			}
+			if (low[i] < (yAxesPrice + outputRange) && close[i] > (yAxesPrice - outputRange) && open[i] > (yAxesPrice - outputRange))
+			{
+				cout << setw(i - prevSpace) << char(179); //Output the candleSticks
+				prevSpace = i;
+				continue;
 			}
 		}
 
