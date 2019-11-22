@@ -235,7 +235,6 @@ void xAxesOutput(vector<string> dateVector)
 }
 
 
-
 vector < pair<float, int> > createVectorPairs(vector<float> vectorReceived)
 {
 	reverse(vectorReceived.begin(), vectorReceived.end());
@@ -257,14 +256,15 @@ vector < pair<float, int> > createVectorPairs(vector<float> vectorReceived)
 	return vectorToPair;
 }
 
+
 void candleSticksOutput(vector<float> open, vector<float> high, vector<float> low, vector<float> close)
 {
 	//Starting to figure out the graph
 	float maxHigh = *max_element(high.begin(), high.end()); //maxHigh is the maximum value from the high vector
 	float minLow = *min_element(low.begin(), low.end()); //minLow is the minimum value from the low vector
 
-	//scale the y axes to 40 values
-	int scale = 60;
+	//scale the y axes to 50 values
+	int scale = high.size() / 1.5;
 	float priceScale = (maxHigh - minLow) / (scale - 1);
 	float outputRange = priceScale / 2; //devide by 2 so that we output on the same line a value 50% above and under the y axes value
 	float yAxesPrice = maxHigh;
