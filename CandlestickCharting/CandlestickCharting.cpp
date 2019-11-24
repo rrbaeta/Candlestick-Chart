@@ -143,7 +143,6 @@ int main()
 	inputFileStream.close();
 
 	//Graph Output
-
 	candleSticksOutput(open, high, low, close);
 	xAxesOutput(dateVector);
 
@@ -151,24 +150,43 @@ int main()
 	xAxesOutput(dateVector);
 
 	//MA Graph
-
-	//Starting to figure out the graph
-	float maxHigh = *max_element(high.begin(), high.end()); //maxHigh is the maximum value from the high vector
-	float minLow = *min_element(low.begin(), low.end()); //minLow is the minimum value from the low vector
-
-	//scale the y axes to 40 values
-	int scale = 40;
-	float priceScale = (maxHigh - minLow) / scale;
-	//float outputRange = priceScale / 2; //devide by 2 so that we output on the same line a value 50% above and under the y axes value
-	float yAxesPrice = maxHigh;
+	int prevSpace = 0, movingAverageValue = 0;
+	vector<float> movingAverage;
 
 	cout << setw(9) << "-Price-" << setw(65) << "Period-9 and period-18 MA chart" << endl;
 
+	for (size_t i = 1; i < (close.size() + 1); i++)
+	{
+
+		for (int x = i; x < (i + 9); x++)
+		{
+			movingAverageValue = movingAverageValue + close[(x - 1)];
+		}
+
+		movingAverage.emplace_back(movingAverageValue);
+
+		movingAverageValue = 0;
+	}
+
+	//Starting to figure out the graph
+	float maxMovingAverage = *max_element(movingAverage.begin(), movingAverage.end());
+	float minMovingAverage = *min_element(movingAverage.begin(), movingAverage.end());
+
+	//scale the y axes to 40 values
+	int scale = movingAverage.size();
+	float priceScale = (maxMovingAverage - minMovingAverage) / (scale - 1);
+	float yAxesPrice = maxMovingAverage;
+	float outputRange = priceScale / 2; //devide by 2 so that we output on the same line a value 50% above and under the y axes value
+
 	for (int i = 0; i < scale; i++)
 	{
-		int prevSpace = 0;
 
 		cout << setw(8) << yAxesPrice << char(180); //Output the maximum value on the y axes
+
+		if (movingAverage[i] < (yAxesPrice + outputRange) && movingAverage[i] > (yAxesPrice - outputRange))
+		{
+			cout << setw(i + 8) << char(43);
+		}
 
 		cout << endl;
 		yAxesPrice = yAxesPrice - priceScale;
