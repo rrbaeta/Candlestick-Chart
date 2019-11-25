@@ -155,15 +155,21 @@ int main()
 
 	cout << setw(9) << "-Price-" << setw(65) << "Period-9 and period-18 MA chart" << endl;
 
-	for (size_t i = 1; i < (close.size() + 1); i++)
+	for (size_t i = 1; i < (close.size() - 8); i++)
 	{
 
 		for (int x = i; x < (i + 9); x++)
 		{
-			movingAverageValue = movingAverageValue + close[(x - 1)];
+			//int q = x;
+			//if (q >= close.size() - 8)
+			//{
+			//	/*q = close.size() - 1;*/
+			//	break;
+			//}
+			movingAverageValue = movingAverageValue + close[(x)];
 		}
 
-		movingAverage.emplace_back(movingAverageValue);
+		movingAverage.emplace_back(movingAverageValue / 9);
 
 		movingAverageValue = 0;
 	}
