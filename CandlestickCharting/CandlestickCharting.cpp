@@ -18,6 +18,7 @@ void xAxesOutput(vector<string> dateVector);
 vector < pair<float, int> > createVectorPairs(vector<float> vectorReceived);
 void candleSticksOutput(vector<float> open, vector<float> high, vector<float> low, vector<float> close);
 void tradingVolumeGraph(vector<float> open, vector<float> volume, vector<float> close);
+void movingAverageGraph(vector<float> close);
 
 int main()
 {
@@ -148,56 +149,8 @@ int main()
 
 	tradingVolumeGraph(open, volume, close);
 	xAxesOutput(dateVector);
-
-	//MA Graph
-	int prevSpace = 0, movingAverageValue = 0;
-	vector<float> movingAverage;
-
-	cout << setw(9) << "-Price-" << setw(65) << "Period-9 and period-18 MA chart" << endl;
-
-	for (size_t i = 1; i < (close.size() - 8); i++)
-	{
-
-		for (int x = i; x < (i + 9); x++)
-		{
-			//int q = x;
-			//if (q >= close.size() - 8)
-			//{
-			//	/*q = close.size() - 1;*/
-			//	break;
-			//}
-			movingAverageValue = movingAverageValue + close[(x)];
-		}
-
-		movingAverage.emplace_back(movingAverageValue / 9);
-
-		movingAverageValue = 0;
-	}
-
-	//Starting to figure out the graph
-	float maxMovingAverage = *max_element(movingAverage.begin(), movingAverage.end());
-	float minMovingAverage = *min_element(movingAverage.begin(), movingAverage.end());
-
-	//scale the y axes to 40 values
-	int scale = movingAverage.size();
-	float priceScale = (maxMovingAverage - minMovingAverage) / (scale - 1);
-	float yAxesPrice = maxMovingAverage;
-	float outputRange = priceScale / 2; //devide by 2 so that we output on the same line a value 50% above and under the y axes value
-
-	for (int i = 0; i < scale; i++)
-	{
-
-		cout << setw(8) << yAxesPrice << char(180); //Output the maximum value on the y axes
-
-		if (movingAverage[i] < (yAxesPrice + outputRange) && movingAverage[i] > (yAxesPrice - outputRange))
-		{
-			cout << setw(i + 8) << char(43);
-		}
-
-		cout << endl;
-		yAxesPrice = yAxesPrice - priceScale;
-	}
-
+	
+	movingAverageGraph(close);
 	xAxesOutput(dateVector);
 
 	cout << "Please type ‘Y’ or ‘y’ to output to text file..." << endl;
@@ -287,13 +240,13 @@ void candleSticksOutput(vector<float> open, vector<float> high, vector<float> lo
 	float maxHigh = *max_element(high.begin(), high.end()); //maxHigh is the maximum value from the high vector
 	float minLow = *min_element(low.begin(), low.end()); //minLow is the minimum value from the low vector
 
-	//scale the y axes to 50 values
-	int scale = high.size() / 1.5;
+	//scale the y axes to half of the data size
+	int scale = high.size() / 2;
 	float priceScale = (maxHigh - minLow) / (scale - 1);
 	float outputRange = priceScale / 2; //devide by 2 so that we output on the same line a value 50% above and under the y axes value
 	float yAxesPrice = maxHigh;
 	int prevSpace = 0;
-
+	int spacing = 0;
 
 	//Create a Vector of pairs
 	reverse(open.begin(), open.end());
@@ -319,14 +272,16 @@ void candleSticksOutput(vector<float> open, vector<float> high, vector<float> lo
 			{
 				if (open[i] < (yAxesPrice + outputRange) && open[i] > (yAxesPrice - outputRange))
 				{
-					cout << setw(i - prevSpace) << char(219); //Output the candleSticks
-					prevSpace = i;
+					spacing = (i + 1) - prevSpace;
+					cout << setw(spacing) << char(219); //Output the candleSticks
+					prevSpace = i + 1;
 					continue;
 				}
 				if (close[i] > (yAxesPrice - outputRange) && open[i] < (yAxesPrice - outputRange))
 				{
-					cout << setw(i - prevSpace) << char(219); //Output the candleSticks
-					prevSpace = i;
+					spacing = (i + 1) - prevSpace;
+					cout << setw(spacing) << char(219); //Output the candleSticks
+					prevSpace = i + 1;
 					continue;
 				}
 			}
@@ -335,28 +290,32 @@ void candleSticksOutput(vector<float> open, vector<float> high, vector<float> lo
 			{
 				if (open[i] > (yAxesPrice - outputRange) && close[i] < (yAxesPrice - outputRange))
 				{
-					cout << setw(i - prevSpace) << char(176); //Output the candleSticks
-					prevSpace = i;
+					spacing = (i + 1) - prevSpace;
+					cout << setw(spacing) << char(176); //Output the candleSticks
+					prevSpace = i + 1;
 					continue;
 				}
 				if (close[i] < (yAxesPrice + outputRange) && close[i] > (yAxesPrice - outputRange))
 				{
-					cout << setw(i - prevSpace) << char(176); //Output the candleSticks
-					prevSpace = i;
+					spacing = (i + 1) - prevSpace;
+					cout << setw(spacing) << char(176); //Output the candleSticks
+					prevSpace = i + 1;
 					continue;
 				}
 			}
 
 			if (high[i] > (yAxesPrice - outputRange) && close[i] < (yAxesPrice - outputRange) && open[i] < (yAxesPrice - outputRange))
 			{
-				cout << setw(i - prevSpace) << char(179); //Output the candleSticks
-				prevSpace = i;
+				spacing = (i + 1) - prevSpace;
+				cout << setw(spacing) << char(179); //Output the candleSticks
+				prevSpace = i + 1;
 				continue;
 			}
 			if (low[i] < (yAxesPrice + outputRange) && close[i] > (yAxesPrice - outputRange) && open[i] > (yAxesPrice - outputRange))
 			{
-				cout << setw(i - prevSpace) << char(179); //Output the candleSticks
-				prevSpace = i;
+				spacing = (i + 1) - prevSpace;
+				cout << setw(spacing) << char(179); //Output the candleSticks
+				prevSpace = i +1;
 				continue;
 			}
 		}
@@ -371,7 +330,6 @@ void candleSticksOutput(vector<float> open, vector<float> high, vector<float> lo
 void tradingVolumeGraph(vector<float> open, vector<float> volume, vector<float> close)
 {
 	//Output Trading Volume Graph
-
 	//scale the y axes to 5 values
 	reverse(volume.begin(), volume.end());
 	reverse(open.begin(), open.end());
@@ -392,12 +350,7 @@ void tradingVolumeGraph(vector<float> open, vector<float> volume, vector<float> 
 		cout << setw(4) << (yAxesVolume / 1000000000) << " Bil" << char(180); //Output the maximum value on the y axes
 
 		prevSpace = 0;
-		/*
-		if (i == scale)
-		{
-			outputRange = outputRange * 1000000;
-		}
-		*/
+
 		for (int x = 0; x < volume.size(); x++)
 		{
 			if (volume[x] >= (yAxesVolume - outputRange))
@@ -420,6 +373,85 @@ void tradingVolumeGraph(vector<float> open, vector<float> volume, vector<float> 
 
 		yAxesVolume = yAxesVolume - volumeScale;
 		cout << endl;
+	}
+}
+
+
+void movingAverageGraph(vector<float> close)
+{
+	//MA Graph
+	int prevSpace = 0, movingAverageValue = 0;
+	vector<float> movingAverage9Period, movingAverage18Period;
+	reverse(close.begin(), close.end());
+	int spacing = 0;
+
+	cout << setw(9) << "-Price-" << setw(65) << "Period-9 and period-18 MA chart" << endl;
+
+	for (size_t i = 1; i < (close.size() - 8); i++)
+	{
+
+		for (int x = i; x < (i + 9); x++)
+		{
+			movingAverageValue = movingAverageValue + close[x];
+		}
+
+		movingAverage9Period.emplace_back(movingAverageValue / 9);
+
+		movingAverageValue = 0;
+	}
+
+	for (size_t i = 1; i < (close.size() - 17); i++)
+	{
+
+		for (int x = i; x < (i + 18); x++)
+		{
+			movingAverageValue = movingAverageValue + close[x];
+		}
+
+		movingAverage18Period.emplace_back(movingAverageValue / 18);
+
+		movingAverageValue = 0;
+	}
+
+	//Starting to figure out the graph
+	float maxMovingAverage = *max_element(movingAverage9Period.begin(), movingAverage9Period.end());
+	float minMovingAverage = *min_element(movingAverage9Period.begin(), movingAverage9Period.end());
+
+	//scale the y axes to half of the size of the movingAverage9Period vector
+	int scale = movingAverage9Period.size() / 2;
+	float priceScale = (maxMovingAverage - minMovingAverage) / (scale - 1);
+	float yAxesPrice = maxMovingAverage;
+	float outputRange = priceScale / 2; //devide by 2 so that we output on the same line a value 50% above and under the y axes value
+
+	for (int i = 0; i < scale; i++)
+	{
+		prevSpace = 0;
+
+		cout << setw(8) << yAxesPrice << char(180); //Output the maximum value on the y axes
+
+		for (size_t x = 0; x < movingAverage9Period.size(); x++)
+		{
+
+			if (movingAverage9Period[x] < (yAxesPrice + outputRange) && movingAverage9Period[x] > (yAxesPrice - outputRange))
+			{
+				spacing = (x + 9) - prevSpace;
+				cout << setw(spacing) << char(43);
+				prevSpace = x + 9;
+			}
+		}
+		/*
+		for (size_t x = 0; x < movingAverage18Period.size(); x++)
+		{
+			if (movingAverage18Period[x] < (yAxesPrice + outputRange) && movingAverage18Period[x] > (yAxesPrice - outputRange))
+			{
+				spacing = (x + 19) - prevSpace;
+				cout << setw(spacing) << char(111);
+				prevSpace = x + 19;
+			}
+		}
+		*/
+		cout << endl;
+		yAxesPrice = yAxesPrice - priceScale;
 	}
 }
 
