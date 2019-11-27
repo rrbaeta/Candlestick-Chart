@@ -1,35 +1,11 @@
-// CandlestickCharting.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//  This file is given as a starting point to help you with your coursework :).
-//  You will want to split this single file into multiple classes, objects and methods fairly early on.
-//  Author:  Rodrigo Baeta
-//     SID:  8789109
-
-#include <iostream>
-#include <iomanip>
-#include <fstream>
-#include <string>
-#include <sstream>
-#include <vector>
-#include <algorithm>
-
 #include "CSV.h"
-#include "Graph.h"
 
-using namespace std;
-
-int main()
+CSV::CSV()
 {
-	CSV csvOutput;
-	Graph graph;
+}
 
-    cout << "Candlestick Charting Program Title!" << endl;
-	cout << "Author:  Rodrigo Baeta" << endl;
-	cout << "SID:  8789109" << endl << endl;
-	
-	/*
-	vector<float> open, high, low, close, volume, marketCap;
-	vector<string> dateVector;
-
+vector < pair<float, string> > CSV::CSVfile()
+{
 	string dateDay;
 
 	// Read input data from .csv file.
@@ -53,7 +29,7 @@ int main()
 	{
 
 		cout << "Input file is good start processing..." << endl << endl;
-		
+
 		cout << right << setw(14) << "Date:" << setw(16) << "Open:" << setw(16) << "High:" << setw(16) << "Low:" << setw(16) << "Close:" << setw(16) << "Volume:" << setw(16) << "Market Cap:" << endl;
 		cout.fill(char(196));
 		cout << setw(112) << char(191) << endl;
@@ -93,32 +69,32 @@ int main()
 				stringstream fss(field);
 				fss >> fieldData; // try to convert to a double, this might fail !!!
 				cout << setw(14) << setprecision(0) << fieldData << " " << char(179);
-				
+
 				//Inserting the values to their respective vectors
 				switch (i)
 				{
 				case 0:
 					open.emplace_back(std::stof(field));
-				break;
+					break;
 				case 1:
 					high.emplace_back(std::stof(field));
-				break;
+					break;
 				case 2:
 					low.emplace_back(std::stof(field));
-				break;
+					break;
 				case 3:
 					close.emplace_back(std::stof(field));
-				break;
+					break;
 				case 4:
 					volume.emplace_back(std::stof(field));
-				break;
+					break;
 				case 5:
 					marketCap.emplace_back(std::stof(field));
-				break;
+					break;
 				default:
 					break;
 				}
-				
+
 			}
 
 			cout << endl;
@@ -142,45 +118,6 @@ int main()
 	}
 
 	inputFileStream.close();
-	*/
 
-	while (true)
-	{
-		char outputTextFile, runAgain;
-
-		//Graph Output
-		//graph.CandleSticksOutput(open, high, low, close);
-		//graph.XAxesOutput(dateVector);
-
-		//graph.TradingVolumeGraph(open, volume, close);
-		//graph.XAxesOutput(dateVector);
-
-		graph.MovingAverageGraph(csvOutput.close);
-		graph.XAxesOutput(csvOutput.dateVector);
-
-		//cout << "Please type 'Y' or 'y' to output to text file..." << endl;
-
-		cout << "Please type 'Y' or 'y' to run again..." << endl;
-		cin >> runAgain;
-		cout << endl;
-
-		if (runAgain == 'y' || runAgain == 'Y')
-		{}
-		else {
-			break;
-		}
-	}
-	cout << "Thank you for using the financial candlestick charting program. Goodbye!" << endl;
+	return open, high, low, close, volume, marketCap, dateVector;
 }
-
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
