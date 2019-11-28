@@ -4,7 +4,7 @@ CSV::CSV()
 {
 }
 
-vector < pair<float, string> > CSV::CSVfile()
+void CSV::CSVfile()
 {
 	string dateDay;
 
@@ -55,7 +55,7 @@ vector < pair<float, string> > CSV::CSVfile()
 			getline(dd, dateDay, ' ');
 			getline(dd, dateDay, ' ');
 
-			dateVector.emplace_back(dateDay);
+			this->dateVector.emplace_back(dateDay);
 
 
 			cout << setw(14) << trimmedDate << " " << char(179);
@@ -74,22 +74,22 @@ vector < pair<float, string> > CSV::CSVfile()
 				switch (i)
 				{
 				case 0:
-					open.emplace_back(std::stof(field));
+					this->open.emplace_back(std::stof(field));
 					break;
 				case 1:
-					high.emplace_back(std::stof(field));
+					this->high.emplace_back(std::stof(field));
 					break;
 				case 2:
-					low.emplace_back(std::stof(field));
+					this->low.emplace_back(std::stof(field));
 					break;
 				case 3:
-					close.emplace_back(std::stof(field));
+					this->close.emplace_back(std::stof(field));
 					break;
 				case 4:
-					volume.emplace_back(std::stof(field));
+					this->volume.emplace_back(std::stof(field));
 					break;
 				case 5:
-					marketCap.emplace_back(std::stof(field));
+					this->marketCap.emplace_back(std::stof(field));
 					break;
 				default:
 					break;
@@ -118,6 +118,4 @@ vector < pair<float, string> > CSV::CSVfile()
 	}
 
 	inputFileStream.close();
-
-	return open, high, low, close, volume, marketCap, dateVector;
 }

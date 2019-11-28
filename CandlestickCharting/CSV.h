@@ -21,7 +21,7 @@ public:
 	vector<float> open, high, low, close, volume, marketCap;
 	vector<string> dateVector;
 
-	vector < pair<float, string> > CSVfile();
+	void CSVfile();
 };
 
 #endif // !CSV_H
