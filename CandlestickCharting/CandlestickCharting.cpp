@@ -22,11 +22,17 @@ int main()
 	CSV csvOutput;
 	Graph graph;
 
+	string fileName;
+
     cout << "Candlestick Charting Program Title!" << endl;
 	cout << "Author:  Rodrigo Baeta" << endl;
 	cout << "SID:  8789109" << endl << endl;
+
+	cout << "Input the file to analyze" << endl;
+	cin >> fileName;
+	cout << endl;
 	
-	csvOutput.CSVfile();
+	csvOutput.CSVfile(fileName);
 	
 	while (true)
 	{

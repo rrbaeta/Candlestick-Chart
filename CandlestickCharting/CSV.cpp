@@ -4,7 +4,7 @@ CSV::CSV()
 {
 }
 
-void CSV::CSVfile()
+void CSV::CSVfile(string fileName)
 {
 	string dateDay;
 
@@ -23,7 +23,8 @@ void CSV::CSVfile()
 	//  However, I have only checked for some of the input file reading errors at each point.
 
 	ifstream inputFileStream;
-	inputFileStream.open("BTChist.csv"); // hardcoded filename, for now...
+	fileName += ".csv";
+	inputFileStream.open(fileName); // hardcoded filename, for now...
 
 	if (inputFileStream.good())
 	{
@@ -114,7 +115,10 @@ void CSV::CSVfile()
 	else
 	{
 		cout << "Error opening input file, ";
-		cout << "check 'BTChist.csv' exists in correct directory." << endl;
+		cout << "check  " << fileName << " exists in correct directory." << endl;
+		
+		//exits the program
+		exit(-1);
 	}
 
 	inputFileStream.close();
