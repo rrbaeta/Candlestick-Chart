@@ -281,7 +281,7 @@ void Graph::MovingAverageGraph(vector<float> close)
 					prevSpace = (int)x + 10;
 					continue;
 				}
-				
+				/*
 				if (movingAverage18Period[x] < (yAxesPrice + outputRange) && movingAverage18Period[x] > (yAxesPrice - outputRange))
 				{
 					spacing = (x + 19) - prevSpace;
@@ -289,7 +289,7 @@ void Graph::MovingAverageGraph(vector<float> close)
 					prevSpace = x + 19;
 					continue;
 				}
-				
+				*/
 			}
 			
 		}
