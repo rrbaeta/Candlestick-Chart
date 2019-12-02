@@ -28,14 +28,14 @@ int main()
 	cout << "Author:  Rodrigo Baeta" << endl;
 	cout << "SID:  8789109" << endl << endl;
 
-	cout << "Input the file to analyze" << endl;
-	cin >> fileName;
-	cout << endl;
-	
-	csvOutput.CSVfile(fileName);
-	
 	while (true)
 	{
+		cout << "Input the file name to analyze" << endl;
+		cin >> fileName;
+		cout << endl;
+	
+		csvOutput.CSVfile(fileName);
+	
 		char outputTextFile, runAgain;
 
 		//Graph Output

@@ -6,6 +6,14 @@ CSV::CSV()
 
 void CSV::CSVfile(string fileName)
 {
+	open.clear();
+	high.clear();
+	close.clear();
+	low.clear();
+	volume.clear();
+	marketCap.clear();
+	dateVector.clear();
+
 	string dateDay;
 
 	// Read input data from .csv file.
@@ -24,7 +32,7 @@ void CSV::CSVfile(string fileName)
 
 	ifstream inputFileStream;
 	fileName += ".csv";
-	inputFileStream.open(fileName); // hardcoded filename, for now...
+	inputFileStream.open(fileName); // User inputs the file name
 
 	if (inputFileStream.good())
 	{
