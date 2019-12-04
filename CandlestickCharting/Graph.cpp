@@ -254,15 +254,15 @@ void Graph::MovingAverageGraph(vector<float> close)
 
 		for (size_t x = 0; x < movingAverage9Period.size(); x++)
 		{
-			/*
+			
 			if (movingAverage9Period[x] < (yAxesPrice + outputRange) && movingAverage9Period[x] > (yAxesPrice - outputRange))
 			{
 				spacing = ((int)x + 10) - prevSpace;
 				cout << setw(spacing) << char(43);
 				prevSpace = (int)x + 10;
 			}
-			*/
 			
+			/*
 			if (x >= movingAverage18Period.size())
 			{
 				if (movingAverage9Period[x] < (yAxesPrice + outputRange) && movingAverage9Period[x] > (yAxesPrice - outputRange))
@@ -284,14 +284,14 @@ void Graph::MovingAverageGraph(vector<float> close)
 				
 				if (movingAverage18Period[x] < (yAxesPrice + outputRange) && movingAverage18Period[x] > (yAxesPrice - outputRange))
 				{
-					spacing = (x + 19) - prevSpace;
+					spacing = ((int)x + 19) - prevSpace;
 					cout << setw(spacing) << char(111);
-					prevSpace = x + 19;
+					prevSpace = (int)x + 19;
 					continue;
 				}
 				
 			}
-			
+			*/
 		}
 		cout << endl;
 		yAxesPrice = yAxesPrice - priceScale;

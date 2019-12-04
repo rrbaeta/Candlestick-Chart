@@ -38,6 +38,9 @@ int main()
 	
 		char outputTextFile, runAgain;
 
+		cout << "\nBullish -> " << char(219) << endl;
+		cout << "Bearish -> " << char(176) << endl;
+
 		//Graph Output
 		graph.CandleSticksOutput(csvOutput.open, csvOutput.high, csvOutput.low, csvOutput.close);
 		graph.XAxesOutput(csvOutput.dateVector);
