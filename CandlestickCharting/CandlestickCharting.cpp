@@ -30,13 +30,14 @@ int main()
 
 	while (true)
 	{
-		cout << "Input the file name to analyze" << endl;
+		cout << "Input the file name to analyze (example: 'BTChist') " << endl;
 		cin >> fileName;
 		cout << endl;
 	
 		csvOutput.CSVfile(fileName);
 	
-		char outputTextFile, runAgain;
+		char runAgain;
+		//char outputTextFile;
 
 		cout << "\nBullish -> " << char(219) << endl;
 		cout << "Bearish -> " << char(176) << endl;

@@ -32,7 +32,7 @@ void Graph::XAxesOutput(vector<string> dateVector)
 		cout << char(194);
 	}
 
-	cout << endl;
+	cout << "-Date-" << endl;
 
 	//Output the dates
 	cout << setw(10);
@@ -50,9 +50,7 @@ void Graph::XAxesOutput(vector<string> dateVector)
 		cout << date[i].second;
 	}
 
-	cout << endl;
-	cout << setw(60) << "-Date-" << endl;
-	cout << endl;
+	cout << endl << endl;
 }
 
 
@@ -208,7 +206,7 @@ void Graph::MovingAverageGraph(vector<float> close)
 	reverse(close.begin(), close.end());
 	int spacing = 0;
 
-	cout << setw(9) << "-Price-" << setw(65) << "Period-9 and period-18 MA chart" << endl;
+	cout << setw(9) << "-Price-" << setw(65) << "Period-9 MA chart" << endl;
 
 	for (size_t i = 1; i < (close.size() - 8); i++)
 	{
